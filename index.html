@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — ДанДан Мебель</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap&subset=cyrillic" rel="stylesheet">
+  <style>
+    :root {
+      --text: #141414;
+      --text-muted: #8c8c8c;
+      --text-body: #2f2f2f;
+      --border: #d9d9d9;
+      --bg-muted: #e8e8e8;
+      --link-hover: #0053b5;
+      --btn-dark: #141414;
+      --btn-dark-hover: #434343;
+      --btn-apply: #8c8c8c;
+      --radius-card: 16px;
+      --radius-pill: 80px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Roboto, system-ui, sans-serif;
+      font-size: 16px;
+      color: var(--text-body);
+      background: #fff;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--link-hover); }
+
+    .site-header {
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+    .site-header__inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .site-logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .site-logo span { font-weight: 400; color: var(--text-muted); }
+    .site-nav {
+      display: flex;
+      gap: 28px;
+      font-size: 14px;
+      font-weight: 400;
+    }
+    .site-nav a { color: var(--text-body); }
+    .site-nav a:hover { color: var(--link-hover); }
+
+    .container {
+      max-width: 1440px;
+      min-width: 360px;
+      margin: 0 auto 52px;
+      padding: 0 24px;
+    }
+
+    .title__top {
+      margin: 58px 0 42px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+    .title__title {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 44px;
+      color: var(--text);
+      margin: 0 8px 0 0;
+    }
+
+    .cart__wrapper {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+    }
+    .cart__left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex: 1;
+      min-width: 0;
+    }
+    .cart__content {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+    }
+    .cart__product {
+      position: relative;
+      padding-bottom: 16px;
+    }
+    .cart__product:last-child {
+      padding-bottom: 0;
+    }
+    .cart__product:last-child .cart__line {
+      display: none;
+    }
+    .basket-item-content {
+      display: flex;
+      gap: 24px;
+      position: relative;
+    }
+    .cart__line {
+      background-color: var(--border);
+      height: 1px;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+    .cart__imgbox {
+      max-width: 87px;
+      min-width: 87px;
+      width: 87px;
+      height: 87px;
+      position: relative;
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .cart__img {
+      mix-blend-mode: multiply;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+    .cart__inner {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      min-width: 0;
+    }
+    .cart__row {
+      display: flex;
+      gap: 24px;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .cart__row--last {
+      flex-direction: column;
+    }
+    .cart__title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+      margin: 0;
+      padding-right: 32px;
+    }
+    .cart__title a { color: var(--text-body); }
+    .cart__title a:hover { color: var(--link-hover); text-decoration: none; }
+    .cart__meta {
+      font-size: 14px;
+      line-height: 21px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .cart__delete {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: -4px;
+      padding: 4px;
+      border: none;
+      background: transparent;
+    }
+    .cart__delete svg {
+      color: var(--text-muted);
+      transition: color 0.3s;
+      display: block;
+    }
+    .cart__delete:hover svg { color: var(--text-body); }
+    .cart__wrap {
+      display: flex;
+      gap: 17px;
+      align-items: center;
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+    .cart__group {
+      display: flex;
+      gap: 14px;
+      margin-left: auto;
+      align-items: center;
+    }
+    .cart__counter {
+      display: flex;
+      align-items: center;
+    }
+    .cart__counter-inner {
+      display: inline-flex;
+      align-items: center;
+    }
+    .cart__counter-btn {
+      width: 24px;
+      height: 25px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      background: transparent;
+      color: var(--text-body);
+    }
+    .cart__counter-btn:hover { color: var(--link-hover); }
+    .cart__count {
+      font-size: 12px;
+      line-height: 18px;
+      text-align: center;
+      width: 36px;
+      border: none;
+      padding: 0;
+      background: transparent;
+      color: var(--text);
+    }
+    .cart__price { white-space: nowrap; min-width: 105px; text-align: right; }
+    .basket-item-total-value {
+      font-size: 24px;
+      font-weight: 600;
+      line-height: 32px;
+      color: var(--text);
+    }
+
+    /* ----- ДанДан: строка «Подарок» в корзине + модальное окно с iframe (/page?key=…) ----- */
+    .cart__product--gift {
+      background: linear-gradient(180deg, rgba(0, 83, 181, 0.04) 0%, transparent 100%);
+      margin: 0 -8px;
+      padding: 8px 8px 16px;
+      border-radius: 12px;
+    }
+    .cart__imgbox--gift {
+      background: linear-gradient(145deg, #e8eef5 0%, #dce6f2 100%);
+    }
+    .cart__gift-icon {
+      width: 40px;
+      height: 40px;
+      color: var(--link-hover);
+    }
+    .cart__gift-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      display: none;
+    }
+    .cart__imgbox--gift-has-image .cart__gift-thumb {
+      display: block;
+    }
+    .cart__imgbox--gift-has-image .cart__gift-icon {
+      display: none;
+    }
+    .cart__gift-meta {
+      font-size: 14px;
+      line-height: 1.45;
+      color: var(--text-muted);
+      margin: 6px 0 0;
+      max-width: 100%;
+    }
+    .cart__gift-meta a {
+      color: var(--link-hover);
+      text-decoration: none;
+    }
+    .cart__gift-meta a:hover {
+      text-decoration: underline;
+    }
+    .cart__product--gift .cart__title {
+      padding-right: 0;
+    }
+    .cart__row--gift-cta {
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      width: 100%;
+      margin-top: 4px;
+    }
+    /* display:flex у .cart__row перебивает [hidden]; скрываем строку с «Получить подарок» после выбора */
+    #dandan-gift-cta-row[hidden] {
+      display: none !important;
+    }
+    .cart__gift-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 10px 28px;
+      border-radius: var(--radius-pill);
+      background: var(--link-hover);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.2;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, filter 0.25s;
+      white-space: nowrap;
+    }
+    .cart__gift-btn:hover {
+      color: #fff;
+      filter: brightness(1.08);
+      text-decoration: none;
+    }
+    .cart__gift-btn:focus-visible {
+      outline: 2px solid rgba(0, 83, 181, 0.45);
+      outline-offset: 2px;
+    }
+
+    .dandan-widget {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .dandan-widget[hidden] {
+      display: none !important;
+    }
+    .dandan-widget__backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(20, 20, 20, 0.55);
+      cursor: pointer;
+    }
+    .dandan-widget__panel {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      width: min(960px, 100%);
+      max-height: min(90vh, 880px);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.22);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .dandan-widget__header {
+      position: relative;
+      display: block;
+      padding: 16px 52px 14px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: #fafafa;
+      text-align: center;
+    }
+    .dandan-widget__header-text {
+      max-width: 100%;
+    }
+    .dandan-widget__title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.25;
+      color: var(--text);
+    }
+    .dandan-widget__subtitle {
+      margin: 8px 0 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text-muted);
+    }
+    .dandan-widget__close {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: #fff;
+      color: var(--text-body);
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      transition: background 0.2s, color 0.2s;
+    }
+    .dandan-widget__close:hover {
+      background: var(--border);
+      color: var(--text);
+    }
+    .dandan-widget__body {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      background: #f0f0f0;
+    }
+    .dandan-widget__frame {
+      display: block;
+      width: 100%;
+      height: min(72vh, 720px);
+      min-height: 400px;
+      border: none;
+      background: #fff;
+    }
+
+    .cart__right {
+      max-width: 460px;
+      width: 100%;
+      flex-shrink: 0;
+    }
+    .cart__stricky {
+      position: sticky;
+      top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .cart__right .cart__content {
+      gap: 8px;
+      margin: 0;
+    }
+    .cart__hint {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: var(--text-body);
+    }
+    .cart__order-banner {
+      margin: 0 0 12px;
+      padding: 0 0 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.45;
+      color: var(--text-body);
+      text-align: center;
+    }
+    .cart__btns {
+      display: flex;
+      gap: 8px;
+      position: relative;
+    }
+    .cart__input {
+      border: 1px solid var(--border);
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      width: 50%;
+      border-radius: 8px;
+      height: 44px;
+      padding: 0 16px;
+    }
+    .cart__input:focus-visible {
+      outline: 2px solid rgba(0, 83, 181, 0.35);
+      outline-offset: 1px;
+    }
+    .cart__input::placeholder {
+      font-size: 16px;
+      color: var(--text-muted);
+    }
+    .cart__btn-apply {
+      color: #fff;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 28px;
+      border-radius: var(--radius-pill);
+      background: var(--btn-apply);
+      height: 44px;
+      width: 50%;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .cart__btn-apply:hover { background: var(--btn-dark-hover); }
+
+    .basket-total .cart__row {
+      align-items: flex-start;
+    }
+    .cart__sum {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: var(--text-body);
+    }
+    .cart__sum-num {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+      color: var(--text);
+    }
+    .cart__weight {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: var(--text-body);
+    }
+    .cart__weight span { color: var(--text-body); }
+    .cart__quantity {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: var(--text-body);
+    }
+    .basket-total > .cart__line {
+      position: static;
+      margin: 8px 0;
+    }
+    .cart__total {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 28px;
+      color: var(--text-body);
+      padding-top: 8px;
+    }
+    .cart__total-num {
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 44px;
+      color: var(--text);
+      margin: 8px 0 0;
+      white-space: nowrap;
+    }
+    .cart__button {
+      height: 60px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 28px;
+      padding: 0 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-pill);
+      background: var(--btn-dark);
+      color: #fff;
+      border: none;
+      transition: background 0.3s;
+      margin-top: 8px;
+    }
+    .cart__button:hover { background: var(--btn-dark-hover); }
+
+    .cross-sell {
+      margin-top: 48px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+    }
+    .cross-sell h2 {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 28px;
+      color: var(--text);
+      margin: 0 0 20px;
+    }
+    .cross-sell__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .cross-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: #fff;
+    }
+    .cross-card__img {
+      aspect-ratio: 4/3;
+      background: var(--bg-muted);
+      object-fit: cover;
+      width: 100%;
+      display: block;
+    }
+    .cross-card__body { padding: 16px; }
+    .cross-card__title {
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 500;
+      margin: 0 0 8px;
+      color: var(--text-body);
+    }
+    .cross-card__price {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    @media (max-width: 1200px) {
+      .title__top { margin: 56px 0 40px; }
+      .title__title { font-size: 32px; line-height: 36px; }
+      .cart__right { max-width: 348px; }
+      .basket-total .cart__row:nth-child(2) { flex-direction: column; gap: 12px; }
+      .cart__sum-num { font-size: 16px; line-height: 24px; }
+      .basket-item-total-value { font-size: 22px; line-height: 24px; }
+      .cart__total-num { font-size: 32px; line-height: 36px; }
+    }
+
+    @media (max-width: 1000px) {
+      .cart__imgbox { width: 103px; min-width: 103px; max-width: 103px; height: 103px; }
+      .cart__right { max-width: 300px; }
+      .cart__btns { flex-direction: column; }
+      .cart__input, .cart__btn-apply { width: 100%; }
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 0 16px; margin-bottom: 32px; }
+      .title__top { margin: 24px 0 16px; flex-wrap: wrap; gap: 8px; }
+      .title__title { font-size: 24px; line-height: 32px; }
+      .cart__wrapper { flex-direction: column; }
+      .cart__right { max-width: none; }
+      .cart__stricky { position: static; }
+      .cart__left .cart__content { border: none; padding: 0; gap: 0; }
+      .cart__content { padding: 16px; border-radius: 8px; }
+      .cart__product { padding: 16px 0; }
+      .basket-item-content { gap: 16px; }
+      .cart__imgbox {
+        width: 62px; min-width: 62px; max-width: 62px; height: 62px;
+        border-radius: 8px;
+      }
+      .cart__title { font-size: 16px; line-height: 24px; }
+      .cart__button { height: 48px; font-size: 14px; }
+      .site-header__inner { padding: 12px 16px; }
+      .site-nav { display: none; }
+      .cart__product--gift { margin: 0; padding: 8px 0 12px; }
+      .cart__row--gift-cta { justify-content: stretch; }
+      .cart__gift-btn { width: 100%; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a href="#" class="site-logo">ДанДан <span>мебель</span></a>
+      <nav class="site-nav" aria-label="Основное меню">
+        <a href="#">Каталог</a>
+        <a href="#">Доставка и оплата</a>
+        <a href="#">Контакты</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="title__top">
+      <h1 class="title__title">Ваша корзина</h1>
+    </div>
+
+    <div class="cart__wrapper">
+      <div class="cart__left">
+        <div class="cart__content">
+
+          <article class="basket-item cart__product">
+            <div class="basket-item-content cart__product-content">
+              <a class="cart__imgbox" href="#" aria-hidden="true" tabindex="-1">
+                <img class="cart__img" src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=200&h=200&fit=crop" width="87" height="87" alt="">
+              </a>
+              <div class="cart__inner">
+                <div class="cart__row">
+                  <div>
+                    <h2 class="cart__title"><a href="#">Диван «Леон», велюр бордо</a></h2>
+                    <p class="cart__meta">Ширина спального места 140&nbsp;см</p>
+                  </div>
+                </div>
+                <div class="cart__row cart__row--last">
+                  <button type="button" class="cart__delete" aria-label="Удалить товар">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v14a1 1 0 01-1 1H8a1 1 0 01-1-1V7h12zM10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="cart__wrap">
+                    <div class="cart__group">
+                      <div class="cart__counter">
+                        <div class="cart__counter-inner">
+                          <button type="button" class="cart__counter-btn" aria-label="Меньше">−</button>
+                          <span class="cart__count" aria-live="polite">1</span>
+                          <button type="button" class="cart__counter-btn" aria-label="Больше">+</button>
+                        </div>
+                      </div>
+                      <div class="cart__price">
+                        <div class="basket-item-total-value">29&nbsp;050&nbsp;₽</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cart__line" aria-hidden="true"></div>
+          </article>
+
+          <article class="basket-item cart__product">
+            <div class="basket-item-content cart__product-content">
+              <a class="cart__imgbox" href="#" aria-hidden="true" tabindex="-1">
+                <img class="cart__img" src="https://images.unsplash.com/photo-1532372320572-cda25653a26d?w=200&h=200&fit=crop" width="87" height="87" alt="">
+              </a>
+              <div class="cart__inner">
+                <div class="cart__row">
+                  <div>
+                    <h2 class="cart__title"><a href="#">Обеденный стол «Сканди» дуб</a></h2>
+                    <p class="cart__meta">160&nbsp;×&nbsp;90&nbsp;см</p>
+                  </div>
+                </div>
+                <div class="cart__row cart__row--last">
+                  <button type="button" class="cart__delete" aria-label="Удалить товар">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                      <path d="M6 7h12M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2m2 0v14a1 1 0 01-1 1H8a1 1 0 01-1-1V7h12zM10 11v6M14 11v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="cart__wrap">
+                    <div class="cart__group">
+                      <div class="cart__counter">
+                        <div class="cart__counter-inner">
+                          <button type="button" class="cart__counter-btn" aria-label="Меньше">−</button>
+                          <span class="cart__count">1</span>
+                          <button type="button" class="cart__counter-btn" aria-label="Больше">+</button>
+                        </div>
+                      </div>
+                      <div class="cart__price">
+                        <div class="basket-item-total-value">18&nbsp;900&nbsp;₽</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="cart__line" aria-hidden="true"></div>
+          </article>
+
+          <!-- ДанДан: карточка подарка (обновляется из postMessage iframe), см. модалку внизу страницы -->
+          <article class="basket-item cart__product cart__product--gift">
+            <div class="basket-item-content cart__product-content">
+              <div class="cart__imgbox cart__imgbox--gift" id="dandan-gift-imgbox" aria-hidden="true">
+                <svg class="cart__gift-icon" id="dandan-gift-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <path d="M12 8V4H9a3 3 0 013-3 3 3 0 013 3v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                  <path d="M4 10h16v10a2 2 0 01-2 2H6a2 2 0 01-2-2V10z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                  <path d="M4 10V9a2 2 0 012-2h12a2 2 0 012 2v1M12 10v12" stroke="currentColor" stroke-width="1.5"/>
+                </svg>
+                <img class="cart__gift-thumb" id="dandan-gift-thumb" src="" alt="" width="87" height="87" hidden>
+              </div>
+              <div class="cart__inner">
+                <div class="cart__row">
+                  <div>
+                    <h2 class="cart__title" id="dandan-gift-title">Подарок за заказ</h2>
+                    <p class="cart__gift-meta" id="dandan-gift-meta" hidden></p>
+                  </div>
+                </div>
+                <div class="cart__row cart__row--last cart__row--gift-cta" id="dandan-gift-cta-row">
+                  <button type="button" class="cart__gift-btn" id="dandan-widget-open" aria-haspopup="dialog" aria-controls="dandan-widget-dialog">
+                    Получить подарок
+                  </button>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <aside class="cart__right">
+        <div class="cart__stricky">
+          <div class="cart__content">
+            <p class="cart__hint">Есть промокод?</p>
+            <div class="cart__btns">
+              <input class="cart__input" type="text" name="promo" placeholder="Промокод" autocomplete="off">
+              <button type="button" class="cart__btn-apply">Применить</button>
+            </div>
+          </div>
+
+          <div class="cart__content basket-total">
+            <p class="cart__order-banner">И заберите его после оформления заказа</p>
+            <div class="cart__row">
+              <div class="cart__sum">Заказ на сумму:</div>
+              <div class="cart__sum-num">47&nbsp;950&nbsp;₽</div>
+            </div>
+            <div class="cart__row">
+              <div class="cart__weight">Общий вес: <span>58&nbsp;кг</span></div>
+              <div class="cart__quantity">Всего позиций: 2&nbsp;шт</div>
+            </div>
+            <div class="cart__line"></div>
+            <div class="cart__row">
+              <div class="cart__total">Итого:</div>
+              <div class="cart__total-num">47&nbsp;950&nbsp;₽</div>
+            </div>
+            <button type="button" class="cart__button">
+              Оформить заказ
+            </button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="cross-sell" aria-labelledby="cross-sell-heading">
+      <h2 id="cross-sell-heading">С этим товаром покупают</h2>
+      <div class="cross-sell__grid">
+        <article class="cross-card">
+          <img class="cross-card__img" src="https://images.unsplash.com/photo-1503602642458-232111445657?w=400&h=300&fit=crop" width="400" height="300" alt="">
+          <div class="cross-card__body">
+            <h3 class="cross-card__title">Тумба прикроватная «Норд»</h3>
+            <p class="cross-card__price">8&nbsp;490&nbsp;₽</p>
+          </div>
+        </article>
+        <article class="cross-card">
+          <img class="cross-card__img" src="https://images.unsplash.com/photo-1618220179428-22790b461013?w=400&h=300&fit=crop" width="400" height="300" alt="">
+          <div class="cross-card__body">
+            <h3 class="cross-card__title">Пуф «Лотта» велюр</h3>
+            <p class="cross-card__price">6&nbsp;200&nbsp;₽</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <!--
+    ДанДан — встраивание страницы /page в iframe:
+    · модалка ниже + <style>/.dandan-widget* и блок .cart__product--gift выше (см. комментарий в <style>)
+    · «Получить подарок» → открывает iframe; /page после выбора подарка шлёт postMessage → обновляется карточка в корзине, модалка закрывается
+  -->
+  <div id="dandan-widget-root" class="dandan-widget" hidden aria-hidden="true">
+    <div class="dandan-widget__backdrop" data-dandan-close tabindex="-1" aria-hidden="true"></div>
+    <div
+      class="dandan-widget__panel"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="dandan-widget-title"
+      aria-describedby="dandan-widget-subtitle"
+      id="dandan-widget-dialog"
+    >
+      <div class="dandan-widget__header">
+        <div class="dandan-widget__header-text">
+          <h2 id="dandan-widget-title" class="dandan-widget__title">Выберите подарок!</h2>
+          <p id="dandan-widget-subtitle" class="dandan-widget__subtitle">И заберите его после оформления заказа</p>
+        </div>
+        <button type="button" class="dandan-widget__close" data-dandan-close aria-label="Закрыть">×</button>
+      </div>
+      <div class="dandan-widget__body">
+        <iframe
+          id="dandan-widget-frame"
+          class="dandan-widget__frame"
+          title="Выберите подарок"
+          src="about:blank"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allow="fullscreen; clipboard-read; clipboard-write"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* Весь код ниже — только ДанДан: модалка + iframe /page + postMessage + карточка подарка в корзине */
+    (function () {
+      var DANDAN_KEY = 'b903417f-f39a-44d0-bdf6-5261f0cdfb18';
+      var DANDAN_PAGE_URL = (function () {
+        var u = new URL('https://dandan-production-fe8b.up.railway.app/page');
+        u.searchParams.set('key', DANDAN_KEY);
+        return u.toString();
+      })();
+      var DANDAN_ORIGIN = new URL(DANDAN_PAGE_URL).origin;
+
+      var root = document.getElementById('dandan-widget-root');
+      var openBtn = document.getElementById('dandan-widget-open');
+      var frame = document.getElementById('dandan-widget-frame');
+      if (!root || !openBtn || !frame) return;
+
+      var lastFocus = null;
+
+      function openWidget() {
+        lastFocus = document.activeElement;
+        frame.src = DANDAN_PAGE_URL;
+        root.hidden = false;
+        root.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        var closeBtn = root.querySelector('.dandan-widget__close');
+        if (closeBtn) closeBtn.focus();
+      }
+
+      function closeWidget() {
+        root.hidden = true;
+        root.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        if (lastFocus && typeof lastFocus.focus === 'function') {
+          if (!lastFocus.hidden && lastFocus.offsetParent !== null) {
+            lastFocus.focus();
+          } else {
+            var titleHeading = document.getElementById('dandan-gift-title');
+            if (titleHeading && typeof titleHeading.focus === 'function') {
+              titleHeading.setAttribute('tabindex', '-1');
+              titleHeading.focus();
+            }
+          }
+        }
+      }
+
+      function safeStoreWebsiteUrl(raw) {
+        if (typeof raw !== 'string' || !raw.trim()) return null;
+        try {
+          var u = new URL(raw.trim());
+          if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+          return u.href;
+        } catch (err) {
+          return null;
+        }
+      }
+
+      function applyGiftFromMessage(data) {
+        if (!data || typeof data !== 'object') return;
+        var titleEl = document.getElementById('dandan-gift-title');
+        var metaEl = document.getElementById('dandan-gift-meta');
+        var thumb = document.getElementById('dandan-gift-thumb');
+        var imgbox = document.getElementById('dandan-gift-imgbox');
+
+        var title = typeof data.title === 'string' && data.title.trim() ? data.title.trim() : '';
+        if (titleEl) titleEl.textContent = title || 'Ваш подарок';
+
+        var storeName = typeof data.storeName === 'string' && data.storeName.trim() ? data.storeName.trim() : '';
+        var storeHref = safeStoreWebsiteUrl(data.storeWebsiteUrl || '');
+        var redeemCode = typeof data.redeemCode === 'string' && data.redeemCode.trim() ? data.redeemCode.trim() : '';
+
+        if (metaEl) {
+          while (metaEl.firstChild) metaEl.removeChild(metaEl.firstChild);
+          var hasStore = !!storeName;
+          var hasPromo = !!redeemCode;
+
+          if (hasStore) {
+            if (storeHref) {
+              var a = document.createElement('a');
+              a.href = storeHref;
+              a.textContent = storeName;
+              a.target = '_blank';
+              a.rel = 'noopener noreferrer';
+              metaEl.appendChild(a);
+            } else {
+              metaEl.appendChild(document.createTextNode(storeName));
+            }
+          }
+          if (hasPromo) {
+            if (hasStore) metaEl.appendChild(document.createTextNode(' · '));
+            var promo = document.createElement('span');
+            promo.textContent = 'Промокод: ' + redeemCode;
+            metaEl.appendChild(promo);
+          }
+          metaEl.hidden = !hasStore && !hasPromo;
+        }
+
+        if (thumb && imgbox) {
+          if (typeof data.imageUrl === 'string' && data.imageUrl) {
+            thumb.src = data.imageUrl;
+            thumb.alt = title || 'Подарок';
+            if (typeof data.imageSrcset === 'string' && data.imageSrcset.trim()) {
+              thumb.setAttribute('srcset', data.imageSrcset.trim());
+            } else {
+              thumb.removeAttribute('srcset');
+            }
+            thumb.removeAttribute('hidden');
+            imgbox.classList.add('cart__imgbox--gift-has-image');
+          } else {
+            thumb.removeAttribute('src');
+            thumb.removeAttribute('srcset');
+            thumb.setAttribute('hidden', '');
+            thumb.alt = '';
+            imgbox.classList.remove('cart__imgbox--gift-has-image');
+          }
+        }
+      }
+
+      function hideGiftCtaRow() {
+        var row = document.getElementById('dandan-gift-cta-row');
+        if (!row) return;
+        row.hidden = true;
+        row.setAttribute('aria-hidden', 'true');
+      }
+
+      openBtn.addEventListener('click', openWidget);
+
+      root.addEventListener('click', function (e) {
+        if (e.target && e.target.closest && e.target.closest('[data-dandan-close]')) closeWidget();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !root.hidden) {
+          e.preventDefault();
+          closeWidget();
+        }
+      });
+
+      window.addEventListener('message', function (e) {
+        if (e.origin !== DANDAN_ORIGIN) return;
+        var msg = e.data;
+        if (!msg || typeof msg !== 'object') return;
+        if (msg.source !== 'dandan-gift' || msg.action !== 'close') return;
+        applyGiftFromMessage(msg.data);
+        hideGiftCtaRow();
+        if (!root.hidden) closeWidget();
+      });
+    })();
+  </script>
+</body>
+</html>
