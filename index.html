@@ -750,7 +750,7 @@
             <div class="cart__line" aria-hidden="true"></div>
           </article>
 
-          <!-- ДанДан: карточка подарка (обновляется из postMessage iframe), см. модалку внизу страницы -->
+          <!-- ДанДан: карточка подарка (POST /offer-select → postMessage с данными карточки, без GET reward) -->
           <article class="basket-item cart__product cart__product--gift">
             <div class="basket-item-content cart__product-content">
               <div class="cart__imgbox cart__imgbox--gift" id="dandan-gift-imgbox" aria-hidden="true">
@@ -806,7 +806,7 @@
               <div class="cart__total-num">47&nbsp;950&nbsp;₽</div>
             </div>
             <button type="button" class="cart__button">
-              Оформить заказ
+              Оплатить и получить подарок
             </button>
           </div>
         </div>
@@ -835,9 +835,11 @@
   </main>
 
   <!--
-    ДанДан — встраивание страницы /page в iframe:
-    · модалка ниже + <style>/.dandan-widget* и блок .cart__product--gift выше (см. комментарий в <style>)
-    · «Получить подарок» → открывает iframe; /page после выбора подарка шлёт postMessage → обновляется карточка в корзине, модалка закрывается
+    ДанДан — iframe /page?key=…:
+    · После «Подтвердить выбор»: POST /offer-select; во фрейме postMessage с data (карточка + clickId).
+    · Кнопка «Оплатить и получить подарок»: открывает ту же модалку, iframe → GET /offer-clicks/:id/reward?key=… (HTML gift-success).
+    · По «Отлично, спасибо» во фрейме награды — postMessage в родительское окно, карточка подарка обновляется.
+    · Отдельно: fetch с Accept: application/json на тот же URL — JSON (см. DanDanSDK.fetchOfferClickReward).
   -->
   <div id="dandan-widget-root" class="dandan-widget" hidden aria-hidden="true">
     <div class="dandan-widget__backdrop" data-dandan-close tabindex="-1" aria-hidden="true"></div>
@@ -875,7 +877,11 @@
       var DANDAN_KEY = 'b903417f-f39a-44d0-bdf6-5261f0cdfb18';
       var DANDAN_BASE = 'https://dandan-production-fe8b.up.railway.app';
       if (typeof DanDanSDK === 'undefined' || !DanDanSDK.mountGiftHostPage) return;
-      DanDanSDK.mountGiftHostPage({ apiKey: DANDAN_KEY, baseUrl: DANDAN_BASE });
+      DanDanSDK.mountGiftHostPage({
+        apiKey: DANDAN_KEY,
+        baseUrl: DANDAN_BASE,
+        claimRewardButtonSelector: '.cart__button'
+      });
     })();
   </script>
 </body>
